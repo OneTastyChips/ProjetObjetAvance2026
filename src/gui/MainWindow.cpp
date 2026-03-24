@@ -3,6 +3,7 @@
 
 #include <gui/DifficultySelector.hpp>
 #include <gui/Interrogation.hpp>
+#include <gui/MascotManager.hpp>
 #include <gui/ScoreDisplay.hpp>
 
 #include <data/Interrogation.hpp>
@@ -77,6 +78,9 @@ MainWindow::MainWindow() {
   connect(quitButton, &QPushButton::clicked, this, &MainWindow::close);
   mMainLayout->addWidget(quitButton, mInterrogationPosition.first + 1, 0);
   // End debug
+  mMascotManager = new MascotManager();
+  mMainLayout->addWidget(mMascotManager, 0, 1, mMainLayout->rowCount() + 1, 1);
+
   auto *centralWidget = new QWidget();
   centralWidget->setLayout(mMainLayout);
   setCentralWidget(centralWidget);

@@ -5,6 +5,7 @@
 
 #include <gui/DifficultySelector.hpp>
 #include <gui/Interrogation.hpp>
+#include <gui/MascotManager.hpp>
 #include <gui/PreviousResult.hpp>
 #include <gui/QuestionTimer.hpp>
 #include <gui/ScoreDisplay.hpp>
@@ -47,6 +48,7 @@ private:
   data::Score mScore;
   data::Difficulty mDifficulty = data::Difficulty::Normal;
   data::QuestionGenerator mQuestionGenerator;
+  MascotManager *mMascotManager = nullptr;
 };
 
 } // namespace NomCool::gui

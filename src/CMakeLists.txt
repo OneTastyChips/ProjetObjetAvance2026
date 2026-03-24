@@ -1,9 +1,12 @@
 
-add_library( base )
+add_library( base
+  resources/icons/ko.png resources/icons/ok.png resources/resource.qrc
+  resources/icons/ko.png resources/icons/ok.png resources/resource.qrc
+  resources/icons/ko.png resources/icons/ok.png resources/mascot/mascot.png resources/resource.qrc )
 
 target_sources( base
   PRIVATE
-    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp
+    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp
 )
 target_sources( base
   PRIVATE

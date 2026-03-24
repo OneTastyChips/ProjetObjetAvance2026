@@ -1,8 +1,8 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-   <qresource>
-      <file>icons/ok.png</file>
-      <file>icons/ko.png</file>
-   </qresource>
-
+<RCC>
+    <qresource prefix="/">
+        <file>icons/ok.png</file>
+        <file>icons/ko.png</file>
+        <file>mascot/mascot.png</file>
+        <file>resource.qrc</file>
+    </qresource>
 </RCC>
