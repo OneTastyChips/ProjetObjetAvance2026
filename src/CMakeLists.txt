@@ -3,11 +3,11 @@ add_library( base )
 
 target_sources( base
   PRIVATE
-    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp
+    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp
 )
 target_sources( base
   PRIVATE
-    data/Interrogation.cpp data/Result.cpp data/Score.cpp
+    data/Interrogation.cpp data/Result.cpp data/Score.cpp data/QuestionGenerator.cpp
 )
 
 target_sources( base

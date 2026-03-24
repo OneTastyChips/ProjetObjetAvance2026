@@ -1,6 +1,7 @@
 
 #include "MainWindow.hpp"
 
+#include <gui/DifficultySelector.hpp>
 #include <gui/Interrogation.hpp>
 #include <gui/ScoreDisplay.hpp>
 
@@ -10,44 +11,26 @@
 
 // Debug
 #include <QPushButton>
-#include <algorithm>
-#include <random>
 // End debug
 
 namespace NomCool::gui {
 
-// Debug
-data::Interrogation createInterrogation() {
-  static std::random_device rd;
-  static std::mt19937 gen(rd());
-  constexpr auto max = 10;
-  std::uniform_int_distribution<> dis(1, max + 1);
-
-  auto lhs = dis(gen);
-  auto rhs = dis(gen);
-  auto valuePlus1 = [](int value) {
-    // For 10, we want 1, for other we want +1
-    // max%max + 1 = 1 and for other x%max + 1 = x + 1
-    return value % max + 1;
-  };
-  std::vector<std::pair<std::string, data::Response>> answers = {
-      {std::to_string(lhs * rhs), "Correct"},
-      {std::to_string(lhs * valuePlus1(rhs)), "Incorrect"},
-      {std::to_string(valuePlus1(lhs) * rhs), "Incorrect"}};
-  std::shuffle(answers.begin(), answers.end(), gen);
-  answers.push_back({"I don't know", "I don't know"});
-  return {std::to_string(lhs) + " * " + std::to_string(rhs), answers};
-}
-// End debug
-
 MainWindow::MainWindow() {
   mMainLayout = new QGridLayout();
+
+  auto *difficultySelector = new DifficultySelector();
+  connect(difficultySelector, &DifficultySelector::difficultyChanged, this,
+          [this](data::Difficulty difficulty) {
+            mDifficulty = difficulty;
+            setInterrogation(mQuestionGenerator.generate(mDifficulty));
+          });
+  mMainLayout->addWidget(difficultySelector, mMainLayout->rowCount(), 0);
 
   // Debug
   auto *randomQuestion = new QPushButton("Random question");
   connect(randomQuestion, &QPushButton::clicked, this,
-          [this] { setInterrogation(createInterrogation()); });
-  mMainLayout->addWidget(randomQuestion, 0, 0);
+          [this] { setInterrogation(mQuestionGenerator.generate(mDifficulty)); });
+  mMainLayout->addWidget(randomQuestion, mMainLayout->rowCount(), 0);
   connect(this, &MainWindow::responseSelected, this,
           [this](data::Response response) {
             mQuestionTimer->stop();
@@ -68,7 +51,7 @@ MainWindow::MainWindow() {
               }
             }
             setScoreDisplay(mScore);
-            setInterrogation(createInterrogation());
+            setInterrogation(mQuestionGenerator.generate(mDifficulty));
           });
   // End debug
 

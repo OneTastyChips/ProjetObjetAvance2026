@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include <gui/DifficultySelector.hpp>
 #include <gui/Interrogation.hpp>
 #include <gui/PreviousResult.hpp>
 #include <gui/QuestionTimer.hpp>
@@ -11,10 +12,9 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include <data/Difficulty.hpp>
+#include <data/QuestionGenerator.hpp>
 #include <data/Score.hpp>
-
-#include <string>
-#include <vector>
 
 namespace NomCool::data {
 class Interrogation;
@@ -45,6 +45,8 @@ private:
   std::pair<int, int> mInterrogationPosition;
   Interrogation *mInterrogation = nullptr;
   data::Score mScore;
+  data::Difficulty mDifficulty = data::Difficulty::Normal;
+  data::QuestionGenerator mQuestionGenerator;
 };
 
 } // namespace NomCool::gui
