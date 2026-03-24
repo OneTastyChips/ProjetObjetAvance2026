@@ -2,6 +2,7 @@
 #include "MainWindow.hpp"
 
 #include <gui/Interrogation.hpp>
+#include <gui/ScoreDisplay.hpp>
 
 #include <data/Interrogation.hpp>
 
@@ -9,6 +10,7 @@
 
 // Debug
 #include <QPushButton>
+#include <algorithm>
 #include <random>
 // End debug
 
@@ -28,11 +30,13 @@ data::Interrogation createInterrogation() {
     // max%max + 1 = 1 and for other x%max + 1 = x + 1
     return value % max + 1;
   };
-  return {std::to_string(lhs) + " * " + std::to_string(rhs),
-          {{std::to_string(lhs * rhs), "Correct"},
-           {std::to_string(lhs * valuePlus1(rhs)), "Incorrect"},
-           {std::to_string(valuePlus1(lhs) * rhs), "Incorrect"},
-           {"I don't know", "I don't know"}}};
+  std::vector<std::pair<std::string, data::Response>> answers = {
+      {std::to_string(lhs * rhs), "Correct"},
+      {std::to_string(lhs * valuePlus1(rhs)), "Incorrect"},
+      {std::to_string(valuePlus1(lhs) * rhs), "Incorrect"}};
+  std::shuffle(answers.begin(), answers.end(), gen);
+  answers.push_back({"I don't know", "I don't know"});
+  return {std::to_string(lhs) + " * " + std::to_string(rhs), answers};
 }
 // End debug
 
@@ -46,18 +50,35 @@ MainWindow::MainWindow() {
   mMainLayout->addWidget(randomQuestion, 0, 0);
   connect(this, &MainWindow::responseSelected, this,
           [this](data::Response response) {
-            if (response == "I don't know") {
-              setPreviousResult({data::Result::Status::Failure,
-                                 "You will get it next time!"});
-            } else if (response == "Correct") {
+            mQuestionTimer->stop();
+            if (response == "Correct") {
+              mScore.recordSuccess();
               setPreviousResult({data::Result::Status::Success, "Well done!"});
             } else {
-              setPreviousResult(
-                  {data::Result::Status::Failure, "No, it's not that one!"});
+              mScore.recordFailure();
+              if (response == "I don't know") {
+                setPreviousResult({data::Result::Status::Failure,
+                                   "You will get it next time!"});
+              } else if (response == "Time's up") {
+                setPreviousResult(
+                    {data::Result::Status::Failure, "Time's up!"});
+              } else {
+                setPreviousResult(
+                    {data::Result::Status::Failure, "No, it's not that one!"});
+              }
             }
+            setScoreDisplay(mScore);
             setInterrogation(createInterrogation());
           });
   // End debug
+
+  mQuestionTimer = new QuestionTimer();
+  connect(mQuestionTimer, &QuestionTimer::timeout, this,
+          [this] { emit responseSelected("Time's up"); });
+  mMainLayout->addWidget(mQuestionTimer, mMainLayout->rowCount(), 0);
+
+  mScoreDisplayPosition = {mMainLayout->rowCount(), 0};
+  setScoreDisplay(mScore);
 
   // This row is reserved for the previous result widget
   // The next one should be added at the mPreviousResultPosition.first + 1
@@ -88,6 +109,18 @@ void MainWindow::setInterrogation(const data::Interrogation &interrogation) {
           &MainWindow::responseSelected);
   mMainLayout->addWidget(mInterrogation, mInterrogationPosition.first,
                          mInterrogationPosition.second);
+
+  mQuestionTimer->start();
+}
+
+void MainWindow::setScoreDisplay(const data::Score &score) {
+  if (mScoreDisplay) {
+    mMainLayout->removeWidget(mScoreDisplay);
+    delete mScoreDisplay;
+  }
+  mScoreDisplay = new ScoreDisplay(score);
+  mMainLayout->addWidget(mScoreDisplay, mScoreDisplayPosition.first,
+                         mScoreDisplayPosition.second);
 }
 
 void MainWindow::setPreviousResult(const data::Result &result) {
