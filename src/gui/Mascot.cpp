@@ -1,7 +1,7 @@
 
 #include "Mascot.hpp"
 
-#include <QLabel>
+#include <QGraphicsColorizeEffect>
 #include <QPixmap>
 #include <QVBoxLayout>
 
@@ -9,12 +9,24 @@ namespace NomCool::gui {
 
 Mascot::Mascot() {
   auto *layout = new QVBoxLayout();
-  auto *imageLabel = new QLabel();
+  mImageLabel = new QLabel();
   QPixmap pixmap(":/mascot/mascot.png");
-  imageLabel->setPixmap(pixmap.scaledToHeight(200, Qt::SmoothTransformation));
-  imageLabel->setAlignment(Qt::AlignCenter);
-  layout->addWidget(imageLabel);
+  mImageLabel->setPixmap(
+      pixmap.scaledToHeight(200, Qt::SmoothTransformation));
+  mImageLabel->setAlignment(Qt::AlignCenter);
+  layout->addWidget(mImageLabel);
   setLayout(layout);
+}
+
+void Mascot::setSkin(const data::Skin &skin) {
+  if (skin.tint.alpha() == 0) {
+    mImageLabel->setGraphicsEffect(nullptr);
+  } else {
+    auto *effect = new QGraphicsColorizeEffect();
+    effect->setColor(skin.tint);
+    effect->setStrength(0.5);
+    mImageLabel->setGraphicsEffect(effect);
+  }
 }
 
 } // namespace NomCool::gui

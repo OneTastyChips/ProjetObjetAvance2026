@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <QAbstractButton>
 #include <QWidget>
 
 #include <data/Difficulty.hpp>
@@ -13,8 +14,13 @@ class DifficultySelector : public QWidget {
 public:
   DifficultySelector();
 
+  void unlockHard();
+
 Q_SIGNALS:
   void difficultyChanged(data::Difficulty difficulty);
+
+private:
+  QAbstractButton *mHardButton = nullptr;
 };
 
 } // namespace NomCool::gui

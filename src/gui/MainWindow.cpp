@@ -17,6 +17,7 @@
 namespace NomCool::gui {
 
 MainWindow::MainWindow() {
+  mExperience.load();
   mMainLayout = new QGridLayout();
 
   auto *difficultySelector = new DifficultySelector();
@@ -25,7 +26,16 @@ MainWindow::MainWindow() {
             mDifficulty = difficulty;
             setInterrogation(mQuestionGenerator.generate(mDifficulty));
           });
+  if (mExperience.isHardUnlocked()) {
+    difficultySelector->unlockHard();
+  }
   mMainLayout->addWidget(difficultySelector, mMainLayout->rowCount(), 0);
+
+  mExperienceBar = new ExperienceBar();
+  mExperienceBar->update(mExperience);
+  connect(mExperienceBar, &ExperienceBar::hardUnlocked, difficultySelector,
+          &DifficultySelector::unlockHard);
+  mMainLayout->addWidget(mExperienceBar, mMainLayout->rowCount(), 0);
 
   // Debug
   auto *randomQuestion = new QPushButton("Random question");
@@ -37,9 +47,11 @@ MainWindow::MainWindow() {
             mQuestionTimer->stop();
             if (response == "Correct") {
               mScore.recordSuccess();
+              mExperience.recordCorrectAnswer(mDifficulty);
               setPreviousResult({data::Result::Status::Success, "Well done!"});
             } else {
               mScore.recordFailure();
+              mExperience.recordWrongAnswer();
               if (response == "I don't know") {
                 setPreviousResult({data::Result::Status::Failure,
                                    "You will get it next time!"});
@@ -51,6 +63,7 @@ MainWindow::MainWindow() {
                     {data::Result::Status::Failure, "No, it's not that one!"});
               }
             }
+            mExperienceBar->update(mExperience);
             setScoreDisplay(mScore);
             setInterrogation(mQuestionGenerator.generate(mDifficulty));
           });
@@ -78,7 +91,7 @@ MainWindow::MainWindow() {
   connect(quitButton, &QPushButton::clicked, this, &MainWindow::close);
   mMainLayout->addWidget(quitButton, mInterrogationPosition.first + 1, 0);
   // End debug
-  mMascotManager = new MascotManager();
+  mMascotManager = new MascotManager(mSkinManager, mExperience);
   mMainLayout->addWidget(mMascotManager, 0, 1, mMainLayout->rowCount() + 1, 1);
 
   auto *centralWidget = new QWidget();

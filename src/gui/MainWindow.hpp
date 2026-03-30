@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include <gui/DifficultySelector.hpp>
+#include <gui/ExperienceBar.hpp>
 #include <gui/Interrogation.hpp>
 #include <gui/MascotManager.hpp>
 #include <gui/PreviousResult.hpp>
@@ -14,8 +15,10 @@
 #include <QLabel>
 
 #include <data/Difficulty.hpp>
+#include <data/Experience.hpp>
 #include <data/QuestionGenerator.hpp>
 #include <data/Score.hpp>
+#include <data/SkinManager.hpp>
 
 namespace NomCool::data {
 class Interrogation;
@@ -48,6 +51,9 @@ private:
   data::Score mScore;
   data::Difficulty mDifficulty = data::Difficulty::Normal;
   data::QuestionGenerator mQuestionGenerator;
+  data::Experience mExperience;
+  data::SkinManager mSkinManager;
+  ExperienceBar *mExperienceBar = nullptr;
   MascotManager *mMascotManager = nullptr;
 };
 

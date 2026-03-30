@@ -6,11 +6,11 @@ add_library( base
 
 target_sources( base
   PRIVATE
-    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp
+    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp gui/ExperienceBar.cpp gui/ShopDialog.cpp
 )
 target_sources( base
   PRIVATE
-    data/Interrogation.cpp data/Result.cpp data/Score.cpp data/QuestionGenerator.cpp
+    data/Interrogation.cpp data/Result.cpp data/Score.cpp data/QuestionGenerator.cpp data/Experience.cpp data/SkinManager.cpp
 )
 
 target_sources( base

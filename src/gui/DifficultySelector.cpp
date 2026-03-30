@@ -15,7 +15,9 @@ DifficultySelector::DifficultySelector() {
   auto *group = new QButtonGroup(this);
   auto *easy = new QRadioButton("Easy");
   auto *normal = new QRadioButton("Normal");
-  auto *hard = new QRadioButton("Hard");
+  auto *hard = new QRadioButton("Hard (locked)");
+  hard->setEnabled(false);
+  mHardButton = hard;
   normal->setChecked(true);
 
   group->addButton(easy, static_cast<int>(data::Difficulty::Easy));
@@ -30,6 +32,11 @@ DifficultySelector::DifficultySelector() {
   connect(group, &QButtonGroup::idClicked, this, [this](int id) {
     emit difficultyChanged(static_cast<data::Difficulty>(id));
   });
+}
+
+void DifficultySelector::unlockHard() {
+  mHardButton->setEnabled(true);
+  mHardButton->setText("Hard");
 }
 
 } // namespace NomCool::gui
