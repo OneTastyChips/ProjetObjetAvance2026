@@ -74,6 +74,23 @@ MainWindow::MainWindow() {
           [this] { emit responseSelected("Time's up"); });
   mMainLayout->addWidget(mQuestionTimer, mMainLayout->rowCount(), 0);
 
+  auto *pauseButton = new QPushButton("Pause");
+  connect(pauseButton, &QPushButton::clicked, this,
+          [this, pauseButton] {
+            if (mQuestionTimer->isPaused()) {
+              mQuestionTimer->resume();
+              if (mInterrogation)
+                mInterrogation->show();
+              pauseButton->setText("Pause");
+            } else {
+              mQuestionTimer->pause();
+              if (mInterrogation)
+                mInterrogation->hide();
+              pauseButton->setText("Resume");
+            }
+          });
+  mMainLayout->addWidget(pauseButton, mMainLayout->rowCount(), 0);
+
   mScoreDisplayPosition = {mMainLayout->rowCount(), 0};
   setScoreDisplay(mScore);
 

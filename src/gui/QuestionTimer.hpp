@@ -15,6 +15,9 @@ public:
 
   void start();
   void stop();
+  void pause();
+  void resume();
+  bool isPaused() const;
 
 Q_SIGNALS:
   void timeout();
@@ -25,6 +28,7 @@ private:
 
   QProgressBar *mBar = nullptr;
   QTimer *mTimer = nullptr;
+  bool mPaused = false;
 };
 
 } // namespace NomCool::gui

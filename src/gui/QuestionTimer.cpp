@@ -27,10 +27,30 @@ QuestionTimer::QuestionTimer() {
 }
 
 void QuestionTimer::start() {
+  mPaused = false;
   mBar->setValue(TIMER_STEPS);
   mTimer->start();
 }
 
-void QuestionTimer::stop() { mTimer->stop(); }
+void QuestionTimer::stop() {
+  mPaused = false;
+  mTimer->stop();
+}
+
+void QuestionTimer::pause() {
+  if (mTimer->isActive()) {
+    mPaused = true;
+    mTimer->stop();
+  }
+}
+
+void QuestionTimer::resume() {
+  if (mPaused) {
+    mPaused = false;
+    mTimer->start();
+  }
+}
+
+bool QuestionTimer::isPaused() const { return mPaused; }
 
 } // namespace NomCool::gui
