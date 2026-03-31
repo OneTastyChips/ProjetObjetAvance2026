@@ -2,6 +2,7 @@
 #include "GamePage.hpp"
 
 #include <data/Interrogation.hpp>
+#include <gui/SettingsDialog.hpp>
 
 namespace NomCool::gui {
 
@@ -77,9 +78,17 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
   auto *contentRow = new QHBoxLayout();
   contentRow->setSpacing(20);
 
-  // Colonne gauche : question + réponses
+  // Colonne gauche : feedback (si mascotte désactivée) + question + réponses
   mQuestionAreaLayout = new QVBoxLayout();
   mQuestionAreaLayout->setSpacing(10);
+
+  mFeedbackLabel = new QLabel();
+  mFeedbackLabel->setWordWrap(true);
+  mFeedbackLabel->setAlignment(Qt::AlignCenter);
+  mFeedbackLabel->setStyleSheet("font-size: 14px; padding: 8px 12px; border-radius: 6px;");
+  mFeedbackLabel->hide();
+  mQuestionAreaLayout->addWidget(mFeedbackLabel);
+
   contentRow->addLayout(mQuestionAreaLayout, 1);
 
   // Colonne droite : bulle de dialogue + mascotte
@@ -95,6 +104,13 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
   mMascot->setSkin(mSkinManager.selectedSkin());
   mascotArea->addWidget(mMascot, 0, Qt::AlignHCenter);
 
+  const bool mascotVisible = SettingsDialog::mascotEnabled();
+  mMascot->setVisible(mascotVisible);
+  mSpeechBubble->setVisible(false); // toujours caché au départ
+
+  if (mascotVisible && SettingsDialog::musicEnabled())
+    mMascot->startRotation();
+
   contentRow->addLayout(mascotArea);
   mainLayout->addLayout(contentRow, 1);
 
@@ -104,6 +120,15 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
 }
 
 void GamePage::nextInterrogation(const data::Interrogation &interrogation) {
+  // Mémoriser la bonne réponse pour le feedback sans mascotte
+  mCorrectAnswerText.clear();
+  for (const auto &answer : interrogation.availableAnswers()) {
+    if (answer.second == "Correct") {
+      mCorrectAnswerText = QString::fromStdString(answer.first);
+      break;
+    }
+  }
+
   if (mInterrogation) {
     mQuestionAreaLayout->removeWidget(mInterrogation);
     delete mInterrogation;
@@ -119,8 +144,25 @@ void GamePage::nextInterrogation(const data::Interrogation &interrogation) {
 }
 
 void GamePage::showResult(const data::Result &result) {
-  mSpeechBubble->setText(QString::fromStdString(result.message()),
-                         result.isSuccess());
+  if (mMascot->isVisible()) {
+    mSpeechBubble->setText(QString::fromStdString(result.message()),
+                           result.isSuccess());
+    return;
+  }
+
+  // Mascotte désactivée : afficher un bandeau de feedback
+  QString text = QString::fromStdString(result.message());
+  if (!result.isSuccess() && !mCorrectAnswerText.isEmpty())
+    text += QString("\nLa bonne réponse était : %1").arg(mCorrectAnswerText);
+
+  mFeedbackLabel->setText(text);
+  mFeedbackLabel->setStyleSheet(
+      result.isSuccess()
+          ? "font-size: 14px; padding: 8px 12px; border-radius: 6px; "
+            "background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;"
+          : "font-size: 14px; padding: 8px 12px; border-radius: 6px; "
+            "background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a;");
+  mFeedbackLabel->show();
 }
 
 void GamePage::refreshScoreDisplay() {

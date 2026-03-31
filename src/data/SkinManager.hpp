@@ -21,11 +21,14 @@ public:
   void selectSkin(int index);
 
   bool purchase(int index, int &gold);
+  void addCustomSkin(const QString &name, const QColor &color);
 
   void save() const;
   void load();
 
 private:
+  static constexpr int BUILT_IN_COUNT = 5;
+
   std::vector<Skin> mSkins;
   std::set<int> mOwnedSkins;
   int mSelectedIndex = 0;

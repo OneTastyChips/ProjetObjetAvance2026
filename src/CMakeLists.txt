@@ -6,7 +6,7 @@ add_library( base
 
 target_sources( base
   PRIVATE
-    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp gui/ExperienceBar.cpp gui/ShopDialog.cpp gui/HomePage.cpp gui/GameSetupPage.cpp gui/GamePage.cpp gui/SpeechBubble.cpp
+    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp gui/ExperienceBar.cpp gui/ShopDialog.cpp gui/HomePage.cpp gui/GameSetupPage.cpp gui/GamePage.cpp gui/SpeechBubble.cpp gui/SkinCreatorDialog.cpp gui/ToggleSwitch.cpp gui/SettingsDialog.cpp
 )
 target_sources( base
   PRIVATE
@@ -21,7 +21,7 @@ target_sources( base
 target_include_directories( base
   PUBLIC "." )
 
-target_link_libraries( base PUBLIC Qt6::Widgets )
+target_link_libraries( base PUBLIC Qt6::Widgets Qt6::Multimedia )
 
 add_executable( ${PROJECT_NAME}
                 main.cpp )

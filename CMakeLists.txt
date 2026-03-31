@@ -16,7 +16,7 @@ set( LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE} )
 set( CMAKE_AUTOMOC ON )
 set( CMAKE_AUTORCC ON )
 list( APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.10.2/macos" )
-find_package( Qt6 REQUIRED COMPONENTS Core Widgets )
+find_package( Qt6 REQUIRED COMPONENTS Core Widgets Multimedia )
 
 enable_testing()
 

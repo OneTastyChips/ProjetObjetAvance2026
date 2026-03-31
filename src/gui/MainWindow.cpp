@@ -1,17 +1,27 @@
 
 #include "MainWindow.hpp"
 
+#include <gui/SettingsDialog.hpp>
+
 namespace NomCool::gui {
 
 MainWindow::MainWindow() {
   mExperience.load();
-  mSkinManager.load();
+
+  // Lecteur audio
+  mMusicPlayer = new QMediaPlayer(this);
+  mAudioOutput = new QAudioOutput(this);
+  mMusicPlayer->setAudioOutput(mAudioOutput);
+  mMusicPlayer->setSource(QUrl("qrc:/music/background.mp3"));
+  mMusicPlayer->setLoops(QMediaPlayer::Infinite);
+  mAudioOutput->setVolume(0.5f);
 
   mStack = new QStackedWidget();
 
   // Page d'accueil
   mHomePage = new HomePage(mExperience, mSkinManager);
   connect(mHomePage, &HomePage::playClicked, this, &MainWindow::showSetup);
+  connect(mHomePage, &HomePage::musicToggled, this, &MainWindow::updateMusic);
   mStack->addWidget(mHomePage); // index 0
 
   // Page de configuration
@@ -29,6 +39,7 @@ MainWindow::MainWindow() {
 void MainWindow::showHome() {
   mHomePage->refresh();
   mStack->setCurrentWidget(mHomePage);
+  updateMusic(SettingsDialog::musicEnabled());
 }
 
 void MainWindow::showSetup() {
@@ -53,6 +64,15 @@ void MainWindow::startGame(const data::GameConfig &config) {
   });
   mStack->addWidget(mGamePage);
   mStack->setCurrentWidget(mGamePage);
+}
+
+void MainWindow::updateMusic(bool enabled) {
+  if (enabled) {
+    if (mMusicPlayer->playbackState() != QMediaPlayer::PlayingState)
+      mMusicPlayer->play();
+  } else {
+    mMusicPlayer->stop();
+  }
 }
 
 } // namespace NomCool::gui

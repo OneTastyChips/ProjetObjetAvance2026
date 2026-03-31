@@ -21,6 +21,7 @@ public:
 
 Q_SIGNALS:
   void playClicked();
+  void musicToggled(bool enabled);
 
 private:
   void rebuildSkinCombo();

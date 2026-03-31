@@ -3,6 +3,7 @@
         <file>icons/ok.png</file>
         <file>icons/ko.png</file>
         <file>mascot/mascot.png</file>
+        <file>music/background.mp3</file>
         <file>resource.qrc</file>
     </qresource>
 </RCC>

@@ -1,7 +1,9 @@
 
 #include "HomePage.hpp"
 
+#include <gui/SettingsDialog.hpp>
 #include <gui/ShopDialog.hpp>
+#include <gui/SkinCreatorDialog.hpp>
 
 #include <QApplication>
 #include <QHBoxLayout>
@@ -43,9 +45,20 @@ HomePage::HomePage(data::Experience &experience, data::SkinManager &skinManager)
             mSkinManager.save();
             mMascot->setSkin(mSkinManager.selectedSkin());
           });
+  auto *createSkinButton = new QPushButton("Personnaliser");
+  createSkinButton->setStyleSheet(
+      "font-size: 12px; border-radius: 6px; "
+      "background-color: #5C6BC0; color: white; padding: 4px 10px;");
+  connect(createSkinButton, &QPushButton::clicked, this, [this] {
+    auto *dialog = new SkinCreatorDialog(mSkinManager, this);
+    if (dialog->exec() == QDialog::Accepted)
+      refresh();
+  });
+
   skinRow->addStretch();
   skinRow->addWidget(skinLabel);
   skinRow->addWidget(mSkinCombo);
+  skinRow->addWidget(createSkinButton);
   skinRow->addStretch();
   mainLayout->addLayout(skinRow);
 
@@ -79,7 +92,13 @@ HomePage::HomePage(data::Experience &experience, data::SkinManager &skinManager)
   settingsButton->setStyleSheet(
       "font-size: 18px; "
       "background-color: #757575; color: white; border-radius: 8px;");
-  settingsButton->setEnabled(false);
+  connect(settingsButton, &QPushButton::clicked, this, [this] {
+    auto *dialog = new SettingsDialog(this);
+    connect(dialog, &SettingsDialog::musicToggled, this,
+            &HomePage::musicToggled);
+    dialog->exec();
+    refresh();
+  });
 
   buttonLayout->addWidget(playButton);
   buttonLayout->addWidget(shopButton);
@@ -119,7 +138,17 @@ void HomePage::rebuildSkinCombo() {
 void HomePage::refresh() {
   mExperienceBar->update(mExperience);
   rebuildSkinCombo();
-  mMascot->setSkin(mSkinManager.selectedSkin());
+  const bool visible = SettingsDialog::mascotEnabled();
+  mMascot->setVisible(visible);
+  if (visible) {
+    mMascot->setSkin(mSkinManager.selectedSkin());
+    if (SettingsDialog::musicEnabled())
+      mMascot->startRotation();
+    else
+      mMascot->stopRotation();
+  } else {
+    mMascot->stopRotation();
+  }
 }
 
 } // namespace NomCool::gui

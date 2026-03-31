@@ -2,6 +2,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include <QStackedWidget>
 
 #include <data/Experience.hpp>
@@ -24,11 +26,15 @@ private:
   void showHome();
   void showSetup();
   void startGame(const data::GameConfig &config);
+  void updateMusic(bool enabled);
 
   QStackedWidget *mStack = nullptr;
   HomePage *mHomePage = nullptr;
   GameSetupPage *mGameSetupPage = nullptr;
   GamePage *mGamePage = nullptr;
+
+  QMediaPlayer *mMusicPlayer = nullptr;
+  QAudioOutput *mAudioOutput = nullptr;
 
   data::Experience mExperience;
   data::SkinManager mSkinManager;

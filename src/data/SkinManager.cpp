@@ -52,6 +52,12 @@ bool SkinManager::purchase(int index, int &gold) {
   return true;
 }
 
+void SkinManager::addCustomSkin(const QString &name, const QColor &color) {
+  mSkins.push_back({name, color, 0});
+  mOwnedSkins.insert(static_cast<int>(mSkins.size()) - 1);
+  save();
+}
+
 void SkinManager::save() const {
   QSettings settings("NomCool", "NomCool");
   settings.setValue("skin/selected", mSelectedIndex);
@@ -61,10 +67,33 @@ void SkinManager::save() const {
     owned.append(QString::number(idx));
   }
   settings.setValue("skin/owned", owned);
+
+  // Sauvegarder les skins custom
+  int customCount = static_cast<int>(mSkins.size()) - BUILT_IN_COUNT;
+  settings.setValue("skin/custom/count", customCount);
+  for (int i = 0; i < customCount; ++i) {
+    const Skin &s = mSkins[BUILT_IN_COUNT + i];
+    settings.setValue(QString("skin/custom/%1/name").arg(i), s.name);
+    settings.setValue(QString("skin/custom/%1/color").arg(i), s.tint.name());
+  }
 }
 
 void SkinManager::load() {
   QSettings settings("NomCool", "NomCool");
+
+  // Charger les skins custom en premier (avant de traiter les indices)
+  int customCount = settings.value("skin/custom/count", 0).toInt();
+  for (int i = 0; i < customCount; ++i) {
+    QString name =
+        settings.value(QString("skin/custom/%1/name").arg(i)).toString();
+    QColor color(
+        settings.value(QString("skin/custom/%1/color").arg(i)).toString());
+    if (name.isEmpty() || !color.isValid())
+      continue;
+    mSkins.push_back({name, color, 0});
+    mOwnedSkins.insert(static_cast<int>(mSkins.size()) - 1);
+  }
+
   mSelectedIndex = settings.value("skin/selected", 0).toInt();
 
   QStringList owned = settings.value("skin/owned").toStringList();
@@ -76,7 +105,6 @@ void SkinManager::load() {
     }
   }
 
-  // Validate selected skin is owned
   if (!isOwned(mSelectedIndex)) {
     mSelectedIndex = 0;
   }

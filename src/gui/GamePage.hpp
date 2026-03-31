@@ -58,8 +58,10 @@ private:
   ExperienceBar *mExperienceBar = nullptr;
   QPushButton *mPauseButton = nullptr;
   QLabel *mCountLabel = nullptr;
+  QLabel *mFeedbackLabel = nullptr;
   Mascot *mMascot = nullptr;
   SpeechBubble *mSpeechBubble = nullptr;
+  QString mCorrectAnswerText;
 };
 
 } // namespace NomCool::gui
