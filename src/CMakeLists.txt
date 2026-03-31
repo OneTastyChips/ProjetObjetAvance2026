@@ -6,7 +6,7 @@ add_library( base
 
 target_sources( base
   PRIVATE
-    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp gui/ExperienceBar.cpp gui/ShopDialog.cpp
+    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp gui/ExperienceBar.cpp gui/ShopDialog.cpp gui/HomePage.cpp gui/GameSetupPage.cpp gui/GamePage.cpp gui/SpeechBubble.cpp
 )
 target_sources( base
   PRIVATE
