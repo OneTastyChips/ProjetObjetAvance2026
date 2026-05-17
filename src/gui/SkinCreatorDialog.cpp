@@ -18,18 +18,15 @@ SkinCreatorDialog::SkinCreatorDialog(data::SkinManager &skinManager,
   mainLayout->setSpacing(16);
   mainLayout->setContentsMargins(24, 20, 24, 20);
 
-  // Titre
   auto *title = new QLabel("Créer un skin personnalisé");
   title->setStyleSheet("font-size: 16px; font-weight: bold;");
   title->setAlignment(Qt::AlignCenter);
   mainLayout->addWidget(title);
 
-  // Aperçu de la mascotte
   mPreviewMascot = new Mascot();
   mPreviewMascot->setSkin({QString(), mSelectedColor, 0});
   mainLayout->addWidget(mPreviewMascot, 0, Qt::AlignCenter);
 
-  // Nom du skin
   auto *nameRow = new QHBoxLayout();
   auto *nameLabel = new QLabel("Nom :");
   nameLabel->setStyleSheet("font-weight: bold;");
@@ -44,7 +41,6 @@ SkinCreatorDialog::SkinCreatorDialog(data::SkinManager &skinManager,
   nameRow->addWidget(mNameEdit);
   mainLayout->addLayout(nameRow);
 
-  // Sélecteur de couleur
   auto *colorRow = new QHBoxLayout();
   auto *colorLabel = new QLabel("Couleur :");
   colorLabel->setStyleSheet("font-weight: bold;");
@@ -61,7 +57,6 @@ SkinCreatorDialog::SkinCreatorDialog(data::SkinManager &skinManager,
 
   mainLayout->addStretch();
 
-  // Boutons Annuler / Sauvegarder
   auto *buttonRow = new QHBoxLayout();
   auto *cancelButton = new QPushButton("Annuler");
   connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);

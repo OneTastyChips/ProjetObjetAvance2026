@@ -13,7 +13,7 @@ SkinManager::SkinManager() {
       {"Fire", QColor(255, 80, 40), 50},
       {"Shadow", QColor(120, 60, 200), 80},
   };
-  mOwnedSkins.insert(0); // Default is always owned
+  mOwnedSkins.insert(0); // le skin par defaut est toujours possede
   load();
 }
 
@@ -68,7 +68,6 @@ void SkinManager::save() const {
   }
   settings.setValue("skin/owned", owned);
 
-  // Sauvegarder les skins custom
   int customCount = static_cast<int>(mSkins.size()) - BUILT_IN_COUNT;
   settings.setValue("skin/custom/count", customCount);
   for (int i = 0; i < customCount; ++i) {
@@ -81,7 +80,7 @@ void SkinManager::save() const {
 void SkinManager::load() {
   QSettings settings("NomCool", "NomCool");
 
-  // Charger les skins custom en premier (avant de traiter les indices)
+  // Recharger les skins custom avant les indices possedes
   int customCount = settings.value("skin/custom/count", 0).toInt();
   for (int i = 0; i < customCount; ++i) {
     QString name =

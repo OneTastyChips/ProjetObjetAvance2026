@@ -77,8 +77,7 @@ void Experience::load() {
 }
 
 int Experience::xpThresholdForLevel(int level) {
-  // Level 1: 0 XP, Level 2: 10 XP, Level 3: 30 XP, Level 4: 60 XP, ...
-  // Formula: 5 * L * (L - 1)
+  // Niveau 1 : 0 XP, Niveau 2 : 10 XP, Niveau 3 : 30 XP, etc.
   return 5 * level * (level - 1);
 }
 

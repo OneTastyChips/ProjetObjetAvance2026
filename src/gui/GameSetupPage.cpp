@@ -16,13 +16,11 @@ GameSetupPage::GameSetupPage(bool hardUnlocked, QWidget *parent)
   mainLayout->setContentsMargins(40, 30, 40, 30);
   mainLayout->setSpacing(20);
 
-  // Titre
   auto *title = new QLabel("Configuration de la partie");
   title->setStyleSheet("font-size: 22px; font-weight: bold;");
   title->setAlignment(Qt::AlignCenter);
   mainLayout->addWidget(title);
 
-  // --- Difficulté ---
   auto *difficultyGroup = new QGroupBox("Difficulté");
   auto *difficultyLayout = new QHBoxLayout();
   mEasyButton = new QRadioButton("Facile");
@@ -41,7 +39,6 @@ GameSetupPage::GameSetupPage(bool hardUnlocked, QWidget *parent)
   difficultyGroup->setLayout(difficultyLayout);
   mainLayout->addWidget(difficultyGroup);
 
-  // --- Chronomètre ---
   auto *timerGroup = new QGroupBox("Chronomètre");
   auto *timerLayout = new QHBoxLayout();
   mTimerOnButton = new QRadioButton("Activé");
@@ -55,7 +52,6 @@ GameSetupPage::GameSetupPage(bool hardUnlocked, QWidget *parent)
   timerGroup->setLayout(timerLayout);
   mainLayout->addWidget(timerGroup);
 
-  // --- Nombre de questions ---
   auto *countGroup = new QGroupBox("Nombre de questions");
   auto *countLayout = new QVBoxLayout();
   mInfiniteButton = new QRadioButton("Infini");
@@ -81,7 +77,6 @@ GameSetupPage::GameSetupPage(bool hardUnlocked, QWidget *parent)
 
   mainLayout->addStretch();
 
-  // --- Boutons ---
   auto *buttonLayout = new QHBoxLayout();
 
   auto *backButton = new QPushButton("Retour");

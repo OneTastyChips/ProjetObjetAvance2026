@@ -16,7 +16,7 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
   mainLayout->setContentsMargins(20, 10, 20, 20);
   mainLayout->setSpacing(8);
 
-  // --- Barre du haut : retour + XP + pause (si applicable) ---
+  // Barre du haut : retour + XP + pause
   auto *topBar = new QHBoxLayout();
 
   auto *backButton = new QPushButton("← Accueil");
@@ -31,7 +31,6 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
   mExperienceBar->update(mExperience);
   topBar->addWidget(mExperienceBar, 1);
 
-  // Bouton pause uniquement si timer ou nombre de questions fixe
   const bool showPause = mConfig.hasTimer || mConfig.questionCount != -1;
   if (showPause) {
     mPauseButton = new QPushButton("Pause");
@@ -53,7 +52,6 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
 
   mainLayout->addLayout(topBar);
 
-  // --- Ligne score ---
   mScoreRow = new QHBoxLayout();
   mScoreDisplay = new ScoreDisplay(mScore);
   mScoreRow->addWidget(mScoreDisplay);
@@ -66,7 +64,6 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
   mScoreRow->addStretch();
   mainLayout->addLayout(mScoreRow);
 
-  // --- Chronomètre ---
   mQuestionTimer = new QuestionTimer();
   if (mConfig.hasTimer) {
     connect(mQuestionTimer, &QuestionTimer::timeout, this,
@@ -74,11 +71,10 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
     mainLayout->addWidget(mQuestionTimer);
   }
 
-  // --- Zone principale : question (gauche) | mascotte + bulle (droite) ---
+  // Zone principale : a gauche la question, a droite la mascotte
   auto *contentRow = new QHBoxLayout();
   contentRow->setSpacing(20);
 
-  // Colonne gauche : feedback (si mascotte désactivée) + question + réponses
   mQuestionAreaLayout = new QVBoxLayout();
   mQuestionAreaLayout->setSpacing(10);
 
@@ -91,7 +87,6 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
 
   contentRow->addLayout(mQuestionAreaLayout, 1);
 
-  // Colonne droite : bulle de dialogue + mascotte
   auto *mascotArea = new QVBoxLayout();
   mascotArea->setSpacing(4);
   mascotArea->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
@@ -106,7 +101,7 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
 
   const bool mascotVisible = SettingsDialog::mascotEnabled();
   mMascot->setVisible(mascotVisible);
-  mSpeechBubble->setVisible(false); // toujours caché au départ
+  mSpeechBubble->setVisible(false);
 
   if (mascotVisible && SettingsDialog::musicEnabled())
     mMascot->startRotation();
@@ -120,7 +115,8 @@ GamePage::GamePage(data::Experience &experience, data::SkinManager &skinManager,
 }
 
 void GamePage::nextInterrogation(const data::Interrogation &interrogation) {
-  // Mémoriser la bonne réponse pour le feedback sans mascotte
+  // On retient la bonne reponse pour pouvoir l'afficher dans le bandeau
+  // de feedback quand la mascotte est cachee.
   mCorrectAnswerText.clear();
   for (const auto &answer : interrogation.availableAnswers()) {
     if (answer.second == "Correct") {
@@ -150,7 +146,7 @@ void GamePage::showResult(const data::Result &result) {
     return;
   }
 
-  // Mascotte désactivée : afficher un bandeau de feedback
+  // Sans mascotte, on retombe sur un bandeau colore
   QString text = QString::fromStdString(result.message());
   if (!result.isSuccess() && !mCorrectAnswerText.isEmpty())
     text += QString("\nLa bonne réponse était : %1").arg(mCorrectAnswerText);

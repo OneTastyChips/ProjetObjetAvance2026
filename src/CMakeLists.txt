@@ -1,12 +1,26 @@
 
 add_library( base
-  resources/icons/ko.png resources/icons/ok.png resources/resource.qrc
-  resources/icons/ko.png resources/icons/ok.png resources/resource.qrc
-  resources/icons/ko.png resources/icons/ok.png resources/mascot/mascot.png resources/resource.qrc )
+  resources/icons/ko.png
+  resources/icons/ok.png
+  resources/mascot/mascot.png
+  resources/resource.qrc )
 
 target_sources( base
   PRIVATE
-    gui/MainWindow.cpp gui/Interrogation.cpp gui/PreviousResult.cpp gui/ScoreDisplay.cpp gui/QuestionTimer.cpp gui/DifficultySelector.cpp gui/Mascot.cpp gui/MascotManager.cpp gui/ExperienceBar.cpp gui/ShopDialog.cpp gui/HomePage.cpp gui/GameSetupPage.cpp gui/GamePage.cpp gui/SpeechBubble.cpp gui/SkinCreatorDialog.cpp gui/ToggleSwitch.cpp gui/SettingsDialog.cpp
+    gui/MainWindow.cpp
+    gui/HomePage.cpp
+    gui/GameSetupPage.cpp
+    gui/GamePage.cpp
+    gui/Interrogation.cpp
+    gui/ScoreDisplay.cpp
+    gui/QuestionTimer.cpp
+    gui/ExperienceBar.cpp
+    gui/Mascot.cpp
+    gui/SpeechBubble.cpp
+    gui/ShopDialog.cpp
+    gui/SkinCreatorDialog.cpp
+    gui/SettingsDialog.cpp
+    gui/ToggleSwitch.cpp
 )
 target_sources( base
   PRIVATE

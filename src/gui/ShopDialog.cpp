@@ -12,7 +12,7 @@ namespace NomCool::gui {
 ShopDialog::ShopDialog(data::SkinManager &skinManager,
                        data::Experience &experience, QWidget *parent)
     : QDialog(parent), mSkinManager(skinManager), mExperience(experience) {
-  setWindowTitle("Shop");
+  setWindowTitle("Boutique");
   setMinimumWidth(350);
 
   auto *mainLayout = new QVBoxLayout();
@@ -35,9 +35,8 @@ ShopDialog::ShopDialog(data::SkinManager &skinManager,
 }
 
 void ShopDialog::rebuildItems() {
-  mGoldLabel->setText(QString("Gold: %1").arg(mExperience.gold()));
+  mGoldLabel->setText(QString("Or : %1").arg(mExperience.gold()));
 
-  // Clear existing items
   while (mItemsLayout->count() > 0) {
     auto *item = mItemsLayout->takeAt(0);
     if (item->widget())
@@ -55,12 +54,10 @@ void ShopDialog::rebuildItems() {
     row->setFrameShape(QFrame::StyledPanel);
     auto *rowLayout = new QHBoxLayout();
 
-    // Mini preview
     auto *preview = new QLabel();
     QPixmap previewPixmap = baseMascot.scaledToHeight(50, Qt::SmoothTransformation);
 
     if (skin.tint.alpha() > 0) {
-      // Apply tint to preview by painting
       QImage img = previewPixmap.toImage();
       for (int y = 0; y < img.height(); ++y) {
         for (int x = 0; x < img.width(); ++x) {
@@ -81,7 +78,6 @@ void ShopDialog::rebuildItems() {
     preview->setAlignment(Qt::AlignCenter);
     rowLayout->addWidget(preview);
 
-    // Name + price
     auto *infoLayout = new QVBoxLayout();
     auto *nameLabel = new QLabel(skin.name);
     nameLabel->setStyleSheet("font-weight: bold;");
@@ -89,11 +85,11 @@ void ShopDialog::rebuildItems() {
 
     if (skin.price > 0) {
       auto *priceLabel =
-          new QLabel(QString("%1 gold").arg(skin.price));
+          new QLabel(QString("%1 or").arg(skin.price));
       priceLabel->setStyleSheet("color: #DAA520;");
       infoLayout->addWidget(priceLabel);
     } else {
-      auto *freeLabel = new QLabel("Free");
+      auto *freeLabel = new QLabel("Gratuit");
       freeLabel->setStyleSheet("color: grey;");
       infoLayout->addWidget(freeLabel);
     }
@@ -101,15 +97,14 @@ void ShopDialog::rebuildItems() {
 
     rowLayout->addStretch();
 
-    // Action button
     if (mSkinManager.isOwned(i)) {
-      auto *ownedLabel = new QLabel("Owned");
+      auto *ownedLabel = new QLabel("Possede");
       ownedLabel->setStyleSheet(
           "color: #4CAF50; font-weight: bold; padding: 5px;");
       rowLayout->addWidget(ownedLabel);
     } else {
       auto *buyButton = new QPushButton(
-          QString("Buy (%1g)").arg(skin.price));
+          QString("Acheter (%1)").arg(skin.price));
       bool canAfford = mExperience.gold() >= skin.price;
       buyButton->setEnabled(canAfford);
       if (!canAfford) {

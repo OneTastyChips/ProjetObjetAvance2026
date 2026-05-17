@@ -19,17 +19,14 @@ HomePage::HomePage(data::Experience &experience, data::SkinManager &skinManager)
   mainLayout->setContentsMargins(30, 20, 30, 30);
   mainLayout->setSpacing(20);
 
-  // Barre XP + gold en haut
   mExperienceBar = new ExperienceBar();
   mExperienceBar->update(mExperience);
   mainLayout->addWidget(mExperienceBar);
 
-  // Mascotte au centre
   mMascot = new Mascot();
   mMascot->setSkin(mSkinManager.selectedSkin());
   mainLayout->addWidget(mMascot, 0, Qt::AlignCenter);
 
-  // Sélecteur de skin
   auto *skinRow = new QHBoxLayout();
   skinRow->setSpacing(8);
   auto *skinLabel = new QLabel("Skin :");
@@ -64,7 +61,6 @@ HomePage::HomePage(data::Experience &experience, data::SkinManager &skinManager)
 
   mainLayout->addStretch();
 
-  // Boutons principaux
   auto *buttonLayout = new QHBoxLayout();
   buttonLayout->setSpacing(15);
 
@@ -105,7 +101,6 @@ HomePage::HomePage(data::Experience &experience, data::SkinManager &skinManager)
   buttonLayout->addWidget(settingsButton);
   mainLayout->addLayout(buttonLayout);
 
-  // Bouton quitter
   auto *quitButton = new QPushButton("Quitter");
   quitButton->setMinimumHeight(35);
   quitButton->setStyleSheet(

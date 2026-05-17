@@ -20,13 +20,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   mainLayout->setContentsMargins(24, 20, 24, 20);
   mainLayout->setSpacing(20);
 
-  // Titre
   auto *title = new QLabel("Paramètres");
   title->setStyleSheet("font-size: 18px; font-weight: bold;");
   title->setAlignment(Qt::AlignCenter);
   mainLayout->addWidget(title);
 
-  // --- Ligne mascotte ---
   auto *mascotRow = new QHBoxLayout();
   auto *mascotLabel = new QLabel("Afficher la mascotte");
   mascotLabel->setStyleSheet("font-size: 14px;");
@@ -40,7 +38,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   mascotRow->addWidget(mMascotToggle);
   mainLayout->addLayout(mascotRow);
 
-  // --- Ligne musique ---
   auto *musicRow = new QHBoxLayout();
   auto *musicLabel = new QLabel("Musique de fond");
   musicLabel->setStyleSheet("font-size: 14px;");
@@ -57,7 +54,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
 
   mainLayout->addStretch();
 
-  // Bouton fermer
   auto *closeButton = new QPushButton("Fermer");
   closeButton->setMinimumHeight(36);
   connect(closeButton, &QPushButton::clicked, this, &QDialog::accept);

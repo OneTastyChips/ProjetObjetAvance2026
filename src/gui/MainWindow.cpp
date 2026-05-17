@@ -8,7 +8,6 @@ namespace NomCool::gui {
 MainWindow::MainWindow() {
   mExperience.load();
 
-  // Lecteur audio
   mMusicPlayer = new QMediaPlayer(this);
   mAudioOutput = new QAudioOutput(this);
   mMusicPlayer->setAudioOutput(mAudioOutput);
@@ -18,19 +17,17 @@ MainWindow::MainWindow() {
 
   mStack = new QStackedWidget();
 
-  // Page d'accueil
   mHomePage = new HomePage(mExperience, mSkinManager);
   connect(mHomePage, &HomePage::playClicked, this, &MainWindow::showSetup);
   connect(mHomePage, &HomePage::musicToggled, this, &MainWindow::updateMusic);
-  mStack->addWidget(mHomePage); // index 0
+  mStack->addWidget(mHomePage);
 
-  // Page de configuration
   mGameSetupPage = new GameSetupPage(mExperience.isHardUnlocked());
   connect(mGameSetupPage, &GameSetupPage::backClicked, this,
           &MainWindow::showHome);
   connect(mGameSetupPage, &GameSetupPage::startGame, this,
           &MainWindow::startGame);
-  mStack->addWidget(mGameSetupPage); // index 1
+  mStack->addWidget(mGameSetupPage);
 
   setCentralWidget(mStack);
   showHome();

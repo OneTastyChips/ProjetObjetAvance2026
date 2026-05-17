@@ -17,13 +17,11 @@ void ToggleSwitch::paintEvent(QPaintEvent *) {
   QPainter p(this);
   p.setRenderHint(QPainter::Antialiasing);
 
-  // Fond
   QColor bg = isChecked() ? QColor(76, 175, 80) : QColor(180, 180, 180);
   p.setBrush(bg);
   p.setPen(Qt::NoPen);
   p.drawRoundedRect(0, 0, W, H, H / 2, H / 2);
 
-  // Cercle blanc
   int margin = (H - CIRCLE) / 2;
   int x = isChecked() ? W - margin - CIRCLE : margin;
   p.setBrush(Qt::white);

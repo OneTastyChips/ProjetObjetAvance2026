@@ -38,7 +38,6 @@ void SpeechBubble::paintEvent(QPaintEvent *) {
   QColor fill = mSuccess ? QColor(230, 255, 230) : QColor(255, 230, 230);
   QColor border = mSuccess ? QColor(100, 180, 100) : QColor(200, 80, 80);
 
-  // Bulle + queue en un seul chemin
   QPainterPath path;
   path.moveTo(RADIUS, 1);
   path.lineTo(w - RADIUS, 1);

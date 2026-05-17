@@ -10,11 +10,11 @@ ExperienceBar::ExperienceBar() {
   auto *layout = new QVBoxLayout();
 
   auto *topRow = new QHBoxLayout();
-  mLevelLabel = new QLabel("Level 1");
+  mLevelLabel = new QLabel("Niveau 1");
   mLevelLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
   topRow->addWidget(mLevelLabel);
 
-  mGoldLabel = new QLabel("Gold: 0");
+  mGoldLabel = new QLabel("Or : 0");
   mGoldLabel->setStyleSheet(
       "font-weight: bold; font-size: 14px; color: #DAA520;");
   topRow->addWidget(mGoldLabel);
@@ -45,15 +45,15 @@ ExperienceBar::ExperienceBar() {
 
 void ExperienceBar::update(const data::Experience &experience) {
   mLevelLabel->setText(
-      QString("Level %1").arg(experience.level()));
+      QString("Niveau %1").arg(experience.level()));
 
-  mGoldLabel->setText(QString("Gold: %1").arg(experience.gold()));
+  mGoldLabel->setText(QString("Or : %1").arg(experience.gold()));
 
   mXPBar->setMaximum(experience.xpForNextLevel());
   mXPBar->setValue(experience.xpInCurrentLevel());
 
   if (experience.streak() >= 2) {
-    mStreakLabel->setText(QString("Streak x%1!").arg(experience.streak()));
+    mStreakLabel->setText(QString("Serie x%1 !").arg(experience.streak()));
     mStreakLabel->show();
   } else {
     mStreakLabel->hide();
@@ -61,7 +61,7 @@ void ExperienceBar::update(const data::Experience &experience) {
 
   if (experience.isHardUnlocked() && !mHardWasUnlocked) {
     mHardWasUnlocked = true;
-    mUnlockLabel->setText("Level 2! Hard difficulty unlocked!");
+    mUnlockLabel->setText("Niveau 2 ! Mode difficile debloque !");
     mUnlockLabel->show();
     emit hardUnlocked();
   }
